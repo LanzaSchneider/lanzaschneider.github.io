@@ -1,49 +1,173 @@
 <!DOCTYPE html>
-<html>
-	<head>
-		<meta charset="utf-8" />
-		<title>www.lanzainc.xyz - Tech</title>
-		<script src="js/jquery.min.js"></script>
-		<script src="js/METERIOTController.core.js"></script>
-		<link type="text/css" href="css/METERIOT.main.css" rel="stylesheet" />
-		<link type="text/css" href="css/METERIOT.icons.css" rel="stylesheet" />
-		<link rel="icon" type="image/x-icon" href="favicon.ico"/>
-		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-		<meta name="author" content="Lanza Schneider"/>
-		<meta name="keywords" content="lanzainc,游戏,独立游戏,lanza,schneider" />
-		<meta name="description" content="lanzainc.xyz主页,收录lanzainc.xyz开发的游戏。" />
-		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-		<meta http-equiv="x-ua-compatible" content="ie=edge">
-	</head>
-	<body class="theme-color-black has-navbar-top scrollbar-dark">
-	
-		<navbar class="navbar-fixed-top theme-color-black">
-			<navicon></navicon>
-			<div class="row navbar-row">
-				<div class="container">
-					<div class="col col-navbar col-navbrand">
-						<img src="images/anim/writing.gif" />
-						<a href="http://www.lanzainc.xyz">www.lanzainc.xyz</a>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="description" content="lanzainc.xyz techs page">
+<meta name="author" content="Lanza">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<title>www.lanzainc.xyz - Tech</title>
+<link rel="shortcut icon" href="favicon.ico" />
+<!-- STYLES -->
+<link rel="stylesheet" type="text/css" href="css/superfish.css" media="screen"/>
+<link rel="stylesheet" type="text/css" href="css/fontello/fontello.css" />
+<link rel="stylesheet" type="text/css" href="css/flexslider.css" media="screen" />
+<link rel="stylesheet" type="text/css" href="css/ui.css" />
+<link rel="stylesheet" type="text/css" href="css/base.css" />
+<link rel="stylesheet" type="text/css" href="css/style.css" />
+<link rel="stylesheet" type="text/css" href="css/960.css" />
+<link rel="stylesheet" type="text/css" href="css/devices/1000.css" media="only screen and (min-width: 768px) and (max-width: 1000px)" />
+<link rel="stylesheet" type="text/css" href="css/devices/767.css" media="only screen and (min-width: 480px) and (max-width: 767px)" />
+<link rel="stylesheet" type="text/css" href="css/devices/479.css" media="only screen and (min-width: 200px) and (max-width: 479px)" />
+<link href='http://fonts.googleapis.com/css?family=Merriweather+Sans:400,300,700,800' rel='stylesheet' type='text/css'>
+<!--[if lt IE 9]> <script type="text/javascript" src="js/customM.js"></script> <![endif]-->
+</head>
+
+<body>
+
+<!-- Body Wrapper -->
+<div class="body-wrapper">
+	<div class="controller">
+    <div class="controller2">
+
+        <!-- Header -->
+        <header id="header">
+            <div class="container">
+                <div class="column">
+                    <div class="logo">
+                        <a href="index.html"><img src="img/logo.png" alt="www.lanzainc.xyz" /></a>
+                    </div>
+                 
+                    <div class="search">
+						<input id="searchia" type="text" value="Search." onblur="if(this.value=='')this.value='Search.';" onfocus="if(this.value=='Search.')this.value='';" class="ft"/>
+                        <input type="submit" value="" class="fs" onclick="window.open('https://cn.bing.com/search?q='+document.getElementById('searchia').value+' site:lanzainc.xyz');">
+                    </div>
+                    
+                    <!-- Nav -->
+                    <nav id="nav">
+                        <ul class="sf-menu">
+                            <li>
+                            	<a href="index.html">游戏.</a>
+                                <ul>
+									<li><i class="icon-right-open"></i><a href="https://indienova.com/g/lanza-halligalli" target="_blank">[2020]Lanza的口袋心脏病.</a></li>
+									<li><i class="icon-right-open"></i><a href="https://indienova.com/g/lanzaparty2017" target="_blank">[2017]Lanza的新年派对.</a></li>
+                                    <li><i class="icon-right-open"></i><a href="https://indienova.com/g/lanzaadventure" target="_blank">[2016]Lanza Adventure.</a></li>
+                                </ul>
+                            </li>
+                            <li class="current">
+                                <a href="tech.html">科技.</a>
+                                <ul>
+                                    <li><i class="icon-right-open"></i><a href="https://rpg.blue/thread-480426-1-1.html" target="_blank">Lanziss(Lanza's RGSS).</a></li>
+                                </ul>
+                            </li>
+                            <li><a href="playroom.html">玩所.</a></li>
+                        </ul>
+                        
+                    </nav>
+                    <!-- /Nav -->
+                </div>
+            </div>
+        </header>
+        <!-- /Header -->
+                
+        <!-- Content -->
+        <section id="content">
+            <div class="container">
+            	<!-- Main Content -->
+                <div class="main-content">
+                    <h5>Lanza's technology showcase.</h5>
+					<div id="tabs">
+						<ul>
+							<li><a href="#tab-lanziss">Lanziss(跨平台扩展的RGSS).</a></li>
+							<li><a href="#tab-pixrd">像素风3D渲染.</a></li>
+							<li><a href="#tab-lanzalloc">lanzalloc(一个非常简单易用的内存池)</a></li>
+						</ul>
+						<div id="tab-lanziss">
+							<p>使用跨平台多媒体库SDL和易于嵌入的ruby版本——mruby编写的RGSS runtime。</p>
+							<p>以opengl来编写渲染部分，从而获得比原版RGSS更高的渲染性能。</p>
+							<p>加入了一些扩展功能如：跳帧、自动跳帧，手柄键鼠触屏支持及联机功能(by fossa)。</p>
+							<p><a href="https://rpg.blue/thread-480426-1-1.html">发布帖 on Project1</a></p>
+							<p><a href="http://lanzainc.ys168.com/">player程序下载链接(科技->Lanziss)</a></p>
+						</div>
+						<div id="tab-pixrd">
+							<p>采用特殊的卡通渲染shader，结合临近采样拉伸的画面以及特殊的后处理效果，可以塑造像素风的渲染画面。灵感来自于像素艺术家LANKA的一篇文章。</p>
+							<a href="#"><img src="img/tech/pixrd/0.gif"/></a>
+							<h4>在3D游戏中实时渲染，可以营造出一种经典游戏的feeling。</h4>
+							<a href="#"><img src="img/tech/pixrd/1.gif"/></a>
+							<a href="#"><img src="img/tech/pixrd/2.gif"/></a>
+							<a href="#"><img src="img/tech/pixrd/3.gif"/></a>
+							<a href="#"><img src="img/tech/pixrd/4.gif"/></a>
+							<a href="#"><img src="img/tech/pixrd/4b.gif"/></a>
+							<h4>预渲染成序列帧作为素材试用，效果亦非常好。</h4>
+							<a href="#"><img src="img/tech/pixrd/5.jpg"/></a>
+							<a href="#"><img src="img/tech/pixrd/6.jpg"/></a>
+							<a href="#"><img src="img/tech/pixrd/7.gif"/></a>
+							<a href="#"><img src="img/tech/pixrd/8.gif"/></a>
+							<p>该项技术将首先尝试运用于我的目前(2020.3)正开发的游戏中。(不过由于事情比较多，所以进度缓慢一些。)</p>
+						</div>
+						<div id="tab-lanzalloc">
+							<p>一个非常简单的内存池。用它分配内存可以比malloc快3倍以上(取决于你给定的units数目)。</p>
+							<p>给定较少的units数目可以获得更高的性能，但是在分配和释放内存比较零碎的场合可能会导致工作不正常；而给定较多的units数目可以获得更高的稳定性，但是相对地，性能就下降了。</p>
+							<p><a href="https://github.com/LanzaSchneider/lanzalloc">github repo</a></p>
+						</div>
+						
 					</div>
-					<div class="col col-navbar [col-navbar-current]">
-						<a href="index.html">游戏</a>
-					</div>
-					<div class="col col-navbar">
-						<a href="#">科技</a>
-					</div>
-					<div class="col col-navbar">
-						<a href="playroom.html">玩所</a>
-					</div>
-				</div>
-			</div>
-		</navbar>
-		
-		<br>
-		
-		<div align="center">
-			<img src="images/anim/writing.gif" />
-			<h3>暂无内容</h3>
-		</div>
-		
-	</body>
+                </div>
+                <!-- /Main Content -->
+                
+            </div>    
+        </section>
+        <!-- / Content -->
+        
+        <!-- Footer -->
+        <footer id="footer">
+            <div class="container">
+            	<div class="column-one-third">
+                    <h5 class="line"><span>友情链接.</span></h5>
+                    <ul class="footnav">
+                    	<li><a href="https://www.interactiveplus.org/"><i class="icon-right-open"></i> 形随意动.</a></li>
+                        <li><a href="http://www.fhnbhj.com/"><i class="icon-right-open"></i> 夜归之龙FHNBHJ.</a></li>
+                    </ul>
+                </div>
+                <div class="column-one-third">
+                    <h5 class="line"><span>Lanza 游所.</span></h5>
+                    <ul class="footnav">
+                    	<li><a href="https://www.indienova.com/u/lanza"><i class="icon-right-open"></i> Lanza in indienova.</a></li>
+                        <li><a href="https://rpg.blue/home.php?mod=space&uid=136539"><i class="icon-right-open"></i> Lanza in rpg.blue.</a></li>
+                    </ul>
+                </div>
+                <div class="column-one-third">
+                    <h5 class="line"><span>联系方式.</span></h5>
+                    <p>QQ:811266970</p>
+					<p><a href="https://jq.qq.com/?_wv=1027&k=5hv6nYg">点击加入Q群</a></p>
+                </div>
+				<div align="center"><h5 class="line"><span>Thanks for your playing!</span></h5></div>
+                <p class="copyright">Copyright &copy; 2016~2020 lanzainc.xyz All rights reserved.<a target="_blank" href="http://sc.chinaz.com/moban/">&#x7F51;&#x9875;&#x6A21;&#x677F;</a></p>
+            </div>
+        </footer>
+        <!-- / Footer -->
+    
+    </div>
+	</div>
+</div>
+<!-- / Body Wrapper -->
+
+
+<!-- SCRIPTS -->
+<script type="text/javascript" src="js/jquery.js"></script>
+<script type="text/javascript" src="js/easing.min.js"></script>
+<script type="text/javascript" src="js/1.8.2.min.js"></script>
+<script type="text/javascript" src="js/ui.js"></script>
+<script type="text/javascript" src="js/carouFredSel.js"></script>
+<script type="text/javascript" src="js/superfish.js"></script>
+<script type="text/javascript" src="js/customM.js"></script>
+<script type="text/javascript" src="js/flexslider-min.js"></script>
+<script type="text/javascript" src="js/tweetable.js"></script>
+<script type="text/javascript" src="js/timeago.js"></script>
+<script type="text/javascript" src="js/jflickrfeed.min.js"></script>
+<script type="text/javascript" src="js/mobilemenu.js"></script>
+
+<!--[if lt IE 9]> <script type="text/javascript" src="js/html5.js"></script> <![endif]-->
+<script type="text/javascript" src="js/mypassion.js"></script>
+
+<div style="display:none"><script src='http://v7.cnzz.com/stat.php?id=155540&web_id=155540' language='JavaScript' charset='gb2312'></script></div>
+</body>
 </html>
