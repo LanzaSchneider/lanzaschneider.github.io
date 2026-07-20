@@ -3,6 +3,7 @@ title: "Lanza Adventure"
 cover:
     image: "imgs/icons/icon-2016.png"
     relative: false
+    hiddenInSingle: true
 date: 2016-08-24
 categories: ["画廊"]
 tags: ["游戏", "旧作", "黑历史"]

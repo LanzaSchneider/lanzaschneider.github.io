@@ -3,6 +3,7 @@ title: "Lanza 的新年派对 2017"
 cover:
     image: "imgs/icons/icon-2017.png"
     relative: false
+    hiddenInSingle: true
 date: 2017-03-19
 categories: ["画廊"]
 tags: ["游戏", "旧作", "黑历史"]

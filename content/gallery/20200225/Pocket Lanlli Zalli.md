@@ -3,6 +3,7 @@ title: "Lanza 的口袋心脏病"
 cover:
     image: "imgs/icons/poster-2020.jpg"
     relative: false
+    hiddenInSingle: true
 date: 2020-02-25
 categories: ["画廊"]
 tags: ["游戏", "旧作", "黑历史"]

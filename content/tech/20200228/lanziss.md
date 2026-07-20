@@ -3,6 +3,7 @@ title: "Lanziss"
 cover:
     image: "imgs/pix/shari.png"
     relative: false
+    hiddenInSingle: true
 date: 2020-02-25
 categories: ["科技"]
 tags: ["游戏引擎", "发布"]
