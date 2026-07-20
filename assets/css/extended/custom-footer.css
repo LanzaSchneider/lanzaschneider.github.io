@@ -1,0 +1,32 @@
+.custom-footer-links {
+    margin-top: 12px;
+    font-size: 0.85rem;
+    color: var(--secondary);
+    text-align: center;
+}
+
+.custom-footer-links .footer-row {
+    margin: 4px 0;
+}
+
+.custom-footer-links .footer-label {
+    font-weight: 500;
+    margin-right: 8px;
+    color: var(--primary);
+}
+
+.custom-footer-links a {
+    color: var(--secondary);
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+.custom-footer-links a:hover {
+    color: var(--primary);
+    text-decoration: underline;
+}
+
+.custom-footer-links .sep {
+    margin: 0 6px;
+    opacity: 0.5;
+}

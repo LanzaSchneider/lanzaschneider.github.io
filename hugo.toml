@@ -1,0 +1,45 @@
+baseURL = 'https://lanzainc.xyz/'
+locale = 'zh-cn'
+title = 'lanzainc.xyz'
+theme = "PaperMod"
+
+[params]
+  defaultTheme = "auto"
+  ShowReadingTime = true
+  ShowShareButtons = false
+  ShowPostNavLinks = true
+  ShowBreadCrumbs = true
+  ShowCodeCopyButtons = true
+  ShowRssButtonInSectionTermList = true
+
+[params.assets]
+  favicon = "favicon.png"
+
+[params.cover]
+  hidden = false
+  hiddenInList = false
+  hiddenInSingle = false
+
+[markup.goldmark.renderer]
+  unsafe = true
+
+[[menu.main]]
+  identifier = "posts"
+  name = "博文"
+  url = "/posts/"
+  weight = 10
+[[menu.main]]
+  identifier = "gallery"
+  name = "画廊"
+  url = "/gallery/"
+  weight = 20
+[[menu.main]]
+  identifier = "playroom"
+  name = "玩所"
+  url = "/playroom/"
+  weight = 30
+[[menu.main]]
+  identifier = "tech"
+  name = "科技"
+  url = "/tech/"
+  weight = 40
