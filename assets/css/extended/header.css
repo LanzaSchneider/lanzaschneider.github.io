@@ -1,0 +1,27 @@
+/* 固定导航栏 */
+.header {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+
+    background-color: rgba(var(--theme-rgb), 0.72) !important;
+    backdrop-filter: blur(12px) saturate(180%);
+    -webkit-backdrop-filter: blur(12px) saturate(180%);
+
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+}
+
+
+.header .logo a,
+.header .menu a {
+    color: var(--primary) !important;
+}
+
+:root {
+    --anchor-scroll-offset: calc(4.2rem + 0.5vw);
+}
+
+html {
+    scroll-padding-top: var(--anchor-scroll-offset);
+}
