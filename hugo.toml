@@ -11,6 +11,37 @@ theme = "PaperMod"
   ShowBreadCrumbs = true
   ShowCodeCopyButtons = true
   ShowRssButtonInSectionTermList = true
+  mainSections = ["posts", "gallery", "tech", "playroom"]
+
+[params.profileMode]
+  enabled = true
+  title = "Lanza Schneider 的小站"
+  subtitle = """
+  ---
+  #### 赛博流浪汉 · 非主流歌手 · 游戏开发者 · 足球迷
+  ---
+  ##### 下列为联系方式，内容索引可看右上角
+  """
+  imageUrl = "favicon.png"
+  imageTitle = "Ray"
+  imageWidth = 128
+  imageHeight = 128
+  
+[[params.profileMode.buttons]]
+  name = "博文标签目录"
+  url = "tags"
+[[params.profileMode.buttons]]
+  name = "关于我"
+  url = "internal/about"
+[[params.socialIcons]]
+  name = "github"
+  url = "https://github.com/LanzaSchneider"
+[[params.socialIcons]]
+  name = "discord"
+  url = "https://discord.com/users/973357933670846495"
+[[params.socialIcons]]
+  name = "email"
+  url = "mailto:schneiderlanza@gmail.com"
 
 [params.assets]
   favicon = "favicon.png"
