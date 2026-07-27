@@ -2,6 +2,12 @@
 
 <div class="home-background" aria-hidden="true"></div>
 
+{{ if .IsPage }}
+<script src="/js/share-card-ui.js" defer></script>
+<script src="/js/share-card-core.js" defer></script>
+<script src="/js/share-card.js" defer></script>
+{{ end }}
+
 {{ if or $.IsHome $.IsSection }}
 <div class="custom-footer-links">
     <div class="footer-row">
