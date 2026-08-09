@@ -1,0 +1,720 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>调式探索键盘 | Modal Explorer</title>
+<style>
+  :root {
+    --bg: #0f0f13;
+    --bg2: #1a1a22;
+    --bg3: #252530;
+    --text: #e8e8f0;
+    --text2: #a0a0b0;
+    --accent: #6c8cff;
+    --accent2: #ff8c6c;
+    --accent3: #8cff6c;
+    --tonic: #ffd700;
+    --dominant: #ff8c42;
+    --subdominant: #42c8ff;
+    --key-w: 72px;
+    --key-h: 220px;
+    --gap: 8px;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+  }
+  h1 {
+    font-size: 1.6rem;
+    font-weight: 600;
+    margin-bottom: 4px;
+    letter-spacing: 1px;
+  }
+  .subtitle {
+    color: var(--text2);
+    font-size: 0.85rem;
+    margin-bottom: 20px;
+  }
+  .controls {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 20px;
+    background: var(--bg2);
+    padding: 16px 24px;
+    border-radius: 16px;
+    border: 1px solid #333;
+    max-width: 900px;
+    width: 100%;
+  }
+  .control-group {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .control-group label {
+    font-size: 0.7rem;
+    color: var(--text2);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  select, input[type="range"] {
+    background: var(--bg3);
+    color: var(--text);
+    border: 1px solid #444;
+    border-radius: 8px;
+    padding: 8px 12px;
+    font-size: 0.9rem;
+    cursor: pointer;
+    outline: none;
+    min-width: 140px;
+  }
+  select:focus { border-color: var(--accent); }
+  input[type="range"] { min-width: 100px; padding: 0; height: 6px; }
+  .scale-desc {
+    color: var(--text2);
+    font-size: 0.8rem;
+    margin-bottom: 12px;
+    text-align: center;
+    max-width: 700px;
+    line-height: 1.5;
+  }
+  .keyboard-wrap {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+    width: 100%;
+    max-width: 1200px;
+  }
+  .keyboard-row {
+    display: flex;
+    gap: var(--gap);
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  .key {
+    width: var(--key-w);
+    height: var(--key-h);
+    background: linear-gradient(180deg, var(--bg3) 0%, var(--bg2) 100%);
+    border: 2px solid #3a3a4a;
+    border-radius: 12px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: center;
+    padding-bottom: 16px;
+    cursor: pointer;
+    transition: all 0.08s ease;
+    position: relative;
+    user-select: none;
+  }
+  .key:hover {
+    border-color: var(--accent);
+    transform: translateY(-4px);
+    box-shadow: 0 8px 24px rgba(108,140,255,0.15);
+  }
+  .key.active {
+    border-color: var(--accent);
+    background: linear-gradient(180deg, #2a2a40 0%, #1e1e30 100%);
+    transform: translateY(2px);
+    box-shadow: 0 0 20px rgba(108,140,255,0.3);
+  }
+  .key.tonic {
+    border-color: var(--tonic);
+    background: linear-gradient(180deg, #3a3518 0%, #2a2510 100%);
+  }
+  .key.tonic:hover { box-shadow: 0 8px 24px rgba(255,215,0,0.2); }
+  .key.tonic.active { box-shadow: 0 0 20px rgba(255,215,0,0.4); }
+  .key.dominant { border-color: var(--dominant); }
+  .key.subdominant { border-color: var(--subdominant); }
+  .key .note-name {
+    font-size: 1.4rem;
+    font-weight: 700;
+    margin-bottom: 4px;
+  }
+  .key .degree {
+    font-size: 0.75rem;
+    color: var(--text2);
+    margin-bottom: 8px;
+  }
+  .key .bind {
+    font-size: 0.7rem;
+    color: #666;
+    background: rgba(0,0,0,0.3);
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-family: monospace;
+  }
+  .key.tonic .note-name { color: var(--tonic); }
+  .key.dominant .note-name { color: var(--dominant); }
+  .key.subdominant .note-name { color: var(--subdominant); }
+  .legend {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    margin-top: 8px;
+    flex-wrap: wrap;
+  }
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.75rem;
+    color: var(--text2);
+  }
+  .legend-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 3px;
+    border: 2px solid;
+  }
+  .hint {
+    color: var(--text2);
+    font-size: 0.75rem;
+    margin-top: 8px;
+    text-align: center;
+  }
+  .octave-label {
+    font-size: 0.65rem;
+    color: #555;
+    position: absolute;
+    top: 8px;
+    right: 8px;
+  }
+  @media (max-width: 768px) {
+    :root { --key-w: 52px; --key-h: 160px; --gap: 4px; }
+    .controls { padding: 12px; }
+    h1 { font-size: 1.2rem; }
+  }
+</style>
+</head>
+<body>
+
+<h1>🎹 调式探索键盘</h1>
+<p class="subtitle">Modal Explorer — 在不同调式中找寻旋律灵感</p>
+
+<div class="controls">
+  <div class="control-group">
+    <label>调式类别</label>
+    <select id="categorySelect"></select>
+  </div>
+  <div class="control-group">
+    <label>具体调式</label>
+    <select id="scaleSelect"></select>
+  </div>
+  <div class="control-group">
+    <label>主音 (Tonic)</label>
+    <select id="tonicSelect"></select>
+  </div>
+  <div class="control-group">
+    <label>中央八度</label>
+    <select id="octaveSelect">
+      <option value="3">C3 (低)</option>
+      <option value="4" selected>C4 (中央C)</option>
+      <option value="5">C5 (高)</option>
+    </select>
+  </div>
+  <div class="control-group">
+    <label>上下扩展</label>
+    <select id="extendSelect">
+      <option value="0">不扩展</option>
+      <option value="1" selected>±1 音</option>
+      <option value="2">±2 音</option>
+      <option value="3">±3 音</option>
+      <option value="4">±4 音</option>
+    </select>
+  </div>
+  <div class="control-group">
+    <label>波形</label>
+    <select id="waveformSelect">
+      <option value="triangle" selected>三角波 (柔和)</option>
+      <option value="sine">正弦波 (纯净)</option>
+      <option value="square">方波 (电子)</option>
+      <option value="sawtooth">锯齿波 (明亮)</option>
+    </select>
+  </div>
+  <div class="control-group">
+    <label>音量</label>
+    <input type="range" id="volumeSlider" min="0" max="100" value="60">
+  </div>
+</div>
+
+<div class="scale-desc" id="scaleDesc"></div>
+
+<div class="keyboard-wrap">
+  <div class="keyboard-row" id="keyboard"></div>
+  <div class="legend">
+    <div class="legend-item"><div class="legend-dot" style="border-color:var(--tonic);background:rgba(255,215,0,0.1)"></div>主音 (Tonic)</div>
+    <div class="legend-item"><div class="legend-dot" style="border-color:var(--dominant);background:rgba(255,140,66,0.1)"></div>属音 (Dominant)</div>
+    <div class="legend-item"><div class="legend-dot" style="border-color:var(--subdominant);background:rgba(66,200,255,0.1)"></div>下属音 (Subdominant)</div>
+    <div class="legend-item"><div class="legend-dot" style="border-color:var(--accent);background:rgba(108,140,255,0.1)"></div>其他音级</div>
+  </div>
+  <p class="hint">💡 提示：可使用键盘上方数字键 <kbd>1</kbd>~<kbd>0</kbd> 及 <kbd>Q</kbd>~<kbd>P</kbd> 演奏对应琴键</p>
+</div>
+
+<script>
+// ===================== 调式数据配置 =====================
+// intervals: 以主音为0的半音偏移数组（在一个八度内）
+// desc: 音程结构描述（中文）
+// degrees: 调式音级名称（罗马数字或唱名）
+
+const SCALE_DATA = {
+  "中古调式 (教会调式)": {
+    ionian: {
+      name: "Ionian · 伊奥尼亚 / 自然大调",
+      intervals: [0, 2, 4, 5, 7, 9, 11],
+      desc: "音程：全─全─半─全─全─全─半 | 明亮、稳定的大调色彩",
+      degrees: ["I", "II", "III", "IV", "V", "VI", "VII"]
+    },
+    dorian: {
+      name: "Dorian · 多利亚",
+      intervals: [0, 2, 3, 5, 7, 9, 10],
+      desc: "音程：全─半─全─全─全─半─全 | 小调色彩，大六度带来古老神秘感",
+      degrees: ["I", "II", "♭III", "IV", "V", "VI", "♭VII"]
+    },
+    phrygian: {
+      name: "Phrygian · 弗里几亚",
+      intervals: [0, 1, 3, 5, 7, 8, 10],
+      desc: "音程：半─全─全─全─半─全─全 | 小二度带来西班牙/弗拉门戈风味",
+      degrees: ["I", "♭II", "♭III", "IV", "V", "♭VI", "♭VII"]
+    },
+    lydian: {
+      name: "Lydian · 利底亚",
+      intervals: [0, 2, 4, 6, 7, 9, 11],
+      desc: "音程：全─全─全─半─全─全─半 | 增四度带来梦幻、漂浮感",
+      degrees: ["I", "II", "III", "♯IV", "V", "VI", "VII"]
+    },
+    mixolydian: {
+      name: "Mixolydian · 混合利底亚",
+      intervals: [0, 2, 4, 5, 7, 9, 10],
+      desc: "音程：全─全─半─全─全─半─全 | 降七度带来布鲁斯、摇滚风味",
+      degrees: ["I", "II", "III", "IV", "V", "VI", "♭VII"]
+    },
+    aeolian: {
+      name: "Aeolian · 爱奥尼亚 / 自然小调",
+      intervals: [0, 2, 3, 5, 7, 8, 10],
+      desc: "音程：全─半─全─全─半─全─全 | 忧伤、暗淡的小调色彩",
+      degrees: ["I", "II", "♭III", "IV", "V", "♭VI", "♭VII"]
+    },
+    locrian: {
+      name: "Locrian · 洛克里亚",
+      intervals: [0, 1, 3, 5, 6, 8, 10],
+      desc: "音程：半─全─全─半─全─全─全 | 减五度带来极不稳定、紧张感",
+      degrees: ["I", "♭II", "♭III", "IV", "♭V", "♭VI", "♭VII"]
+    }
+  },
+  "中国民族五声调式": {
+    gong: {
+      name: "宫调式 · 五声",
+      intervals: [0, 2, 4, 7, 9],
+      desc: "音程：大二─大二─小三─大二─小三 | 明亮开阔，大调色彩",
+      degrees: ["宫", "商", "角", "徵", "羽"]
+    },
+    shang: {
+      name: "商调式 · 五声",
+      intervals: [0, 2, 5, 7, 10],
+      desc: "音程：大二─小三─大二─小三─大二 | 以商为主音",
+      degrees: ["商", "角", "徵", "羽", "宫"]
+    },
+    jue: {
+      name: "角调式 · 五声",
+      intervals: [0, 3, 5, 8, 10],
+      desc: "音程：小三─大二─小三─大二─大二 | 以角为主音",
+      degrees: ["角", "徵", "羽", "宫", "商"]
+    },
+    zhi: {
+      name: "徵调式 · 五声",
+      intervals: [0, 2, 5, 7, 9],
+      desc: "音程：大二─小三─大二─大二─小三 | 以徵为主音",
+      degrees: ["徵", "羽", "宫", "商", "角"]
+    },
+    yu: {
+      name: "羽调式 · 五声",
+      intervals: [0, 3, 5, 7, 10],
+      desc: "音程：小三─大二─大二─小三─大二 | 暗淡柔和，小调色彩",
+      degrees: ["羽", "宫", "商", "角", "徵"]
+    }
+  },
+  "日本民族调式": {
+    miyako: {
+      name: "都节调式 · 日本",
+      intervals: [0, 1, 5, 7, 8],
+      desc: "音程：半─大三─全─半─大三 | 日本传统音乐，凄美哀伤",
+      degrees: ["主", "↓II", "IV", "V", "↓VI"]
+    },
+    ryukyu: {
+      name: "琉球调式 · 日本",
+      intervals: [0, 4, 5, 7, 11],
+      desc: "音程：大三─半─全─大三─半 | 冲绳民谣，独特的大三度跳跃",
+      degrees: ["主", "III", "IV", "V", "VII"]
+    }
+  },
+  "其他特色调式": {
+    blues: {
+      name: "Blues · 蓝调音阶",
+      intervals: [0, 3, 5, 6, 7, 10],
+      desc: "音程：小三─全─半─半─小三─全 | 蓝调音符(#4/b5)带来独特张力",
+      degrees: ["I", "♭III", "IV", "♯IV", "V", "♭VII"]
+    },
+    wholeTone: {
+      name: "Whole Tone · 全音音阶",
+      intervals: [0, 2, 4, 6, 8, 10],
+      desc: "音程：全─全─全─全─全─全 | 德彪西最爱，模糊无根感",
+      degrees: ["I", "II", "III", "♯IV", "♯V", "♯VI"]
+    },
+    halfWholeDim: {
+      name: "Half-Whole · 半全减音阶",
+      intervals: [0, 1, 3, 4, 6, 7, 9, 10],
+      desc: "音程：半─全─半─全─半─全─半─全 | 爵士乐常用，减七和弦色彩",
+      degrees: ["I", "♭II", "♭III", "III", "♯IV", "V", "VI", "♭VII"]
+    },
+    wholeHalfDim: {
+      name: "Whole-Half · 全半减音阶",
+      intervals: [0, 2, 3, 5, 6, 8, 9, 11],
+      desc: "音程：全─半─全─半─全─半─全─半 | 另一种减音阶排列",
+      degrees: ["I", "II", "♭III", "IV", "♭V", "♭VI", "♭VII", "VII"]
+    },
+    harmonicMinor: {
+      name: "Harmonic Minor · 和声小调",
+      intervals: [0, 2, 3, 5, 7, 8, 11],
+      desc: "音程：全─半─全─全─半─增二─半 | 升高七级，异域风情",
+      degrees: ["I", "II", "♭III", "IV", "V", "♭VI", "VII"]
+    },
+    melodicMinor: {
+      name: "Melodic Minor · 旋律小调 (上行)",
+      intervals: [0, 2, 3, 5, 7, 9, 11],
+      desc: "音程：全─半─全─全─全─全─半 | 升高六七级，爵士乐常用",
+      degrees: ["I", "II", "♭III", "IV", "V", "VI", "VII"]
+    },
+    phrygianDom: {
+      name: "Phrygian Dominant · 大佛里吉亚",
+      intervals: [0, 1, 4, 5, 7, 8, 10],
+      desc: "音程：半─小三─半─全─半─全─全 | 弗拉门戈、中东音乐",
+      degrees: ["I", "♭II", "III", "IV", "V", "♭VI", "♭VII"]
+    },
+    hungarianMinor: {
+      name: "Hungarian Minor · 匈牙利小音阶",
+      intervals: [0, 2, 3, 6, 7, 8, 11],
+      desc: "音程：全─半─增二─半─半─增二─半 | 吉普赛、匈牙利民间音乐",
+      degrees: ["I", "II", "♭III", "♯IV", "V", "♭VI", "VII"]
+    },
+    persian: {
+      name: "Persian · 波斯音阶",
+      intervals: [0, 1, 4, 5, 6, 9, 10],
+      desc: "音程：半─小三─半─半─小三─半─全 | 中东、波斯音乐色彩",
+      degrees: ["I", "♭II", "III", "IV", "♭V", "♯V", "♭VII"]
+    }
+  }
+};
+
+// 主音选项（半音级 -> 音名）
+const TONIC_NAMES = [
+  { midi: 0,  name: "C",    label: "C" },
+  { midi: 1,  name: "C♯",   label: "C# / D♭" },
+  { midi: 2,  name: "D",    label: "D" },
+  { midi: 3,  name: "D♯",   label: "D# / E♭" },
+  { midi: 4,  name: "E",    label: "E" },
+  { midi: 5,  name: "F",    label: "F" },
+  { midi: 6,  name: "F♯",   label: "F# / G♭" },
+  { midi: 7,  name: "G",    label: "G" },
+  { midi: 8,  name: "G♯",   label: "G# / A♭" },
+  { midi: 9,  name: "A",    label: "A" },
+  { midi: 10, name: "A♯",   label: "A# / B♭" },
+  { midi: 11, name: "B",    label: "B" }
+];
+
+// 键盘绑定键位
+const KEY_BINDINGS = [
+  '1','2','3','4','5','6','7','8','9','0',
+  'q','w','e','r','t','y','u','i','o','p',
+  'a','s','d','f','g','h','j','k','l',';'
+];
+
+// 音名计算（根据MIDI音符号）
+function midiToNoteName(midi, preferSharp = true) {
+  const namesSharp = ['C','C♯','D','D♯','E','F','F♯','G','G♯','A','A♯','B'];
+  const namesFlat  = ['C','D♭','D','E♭','E','F','G♭','G','A♭','A','B♭','B'];
+  const pc = ((midi % 12) + 12) % 12;
+  return preferSharp ? namesSharp[pc] : namesFlat[pc];
+}
+
+// ===================== 音频引擎 =====================
+let audioCtx = null;
+let masterGain = null;
+
+function initAudio() {
+  if (!audioCtx) {
+    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    masterGain = audioCtx.createGain();
+    masterGain.connect(audioCtx.destination);
+  }
+  if (audioCtx.state === 'suspended') {
+    audioCtx.resume();
+  }
+}
+
+function setVolume(val) {
+  if (masterGain) {
+    masterGain.gain.value = val / 100;
+  }
+}
+
+function playNote(midi, waveform = 'triangle', duration = 0.15) {
+  initAudio();
+  const freq = 440 * Math.pow(2, (midi - 69) / 12);
+  const osc = audioCtx.createOscillator();
+  const gain = audioCtx.createGain();
+  
+  osc.type = waveform;
+  osc.frequency.value = freq;
+  
+  const now = audioCtx.currentTime;
+  const attack = 0.01;
+  const decay = 0.08;
+  const sustain = 0.3;
+  const release = 0.2;
+  
+  gain.gain.setValueAtTime(0, now);
+  gain.gain.linearRampToValueAtTime(1, now + attack);
+  gain.gain.exponentialRampToValueAtTime(sustain, now + attack + decay);
+  gain.gain.setValueAtTime(sustain, now + duration);
+  gain.gain.exponentialRampToValueAtTime(0.001, now + duration + release);
+  
+  osc.connect(gain);
+  gain.connect(masterGain);
+  
+  osc.start(now);
+  osc.stop(now + duration + release + 0.1);
+  
+  // 自动清理
+  setTimeout(() => {
+    osc.disconnect();
+    gain.disconnect();
+  }, (duration + release + 0.2) * 1000);
+}
+
+// ===================== UI 逻辑 =====================
+const categorySelect = document.getElementById('categorySelect');
+const scaleSelect = document.getElementById('scaleSelect');
+const tonicSelect = document.getElementById('tonicSelect');
+const octaveSelect = document.getElementById('octaveSelect');
+const extendSelect = document.getElementById('extendSelect');
+const waveformSelect = document.getElementById('waveformSelect');
+const volumeSlider = document.getElementById('volumeSlider');
+const keyboardEl = document.getElementById('keyboard');
+const scaleDescEl = document.getElementById('scaleDesc');
+
+// 初始化下拉菜单
+function initControls() {
+  // 类别
+  Object.keys(SCALE_DATA).forEach(cat => {
+    const opt = document.createElement('option');
+    opt.value = cat;
+    opt.textContent = cat;
+    categorySelect.appendChild(opt);
+  });
+  
+  // 主音
+  TONIC_NAMES.forEach(t => {
+    const opt = document.createElement('option');
+    opt.value = t.midi;
+    opt.textContent = t.label;
+    tonicSelect.appendChild(opt);
+  });
+  
+  updateScaleOptions();
+}
+
+function updateScaleOptions() {
+  const cat = categorySelect.value;
+  scaleSelect.innerHTML = '';
+  Object.entries(SCALE_DATA[cat]).forEach(([key, scale]) => {
+    const opt = document.createElement('option');
+    opt.value = key;
+    opt.textContent = scale.name;
+    scaleSelect.appendChild(opt);
+  });
+  renderKeyboard();
+}
+
+// 计算当前要显示的音符列表
+function getCurrentNotes() {
+  const cat = categorySelect.value;
+  const scaleKey = scaleSelect.value;
+  const scale = SCALE_DATA[cat][scaleKey];
+  const tonicMidi = parseInt(tonicSelect.value);
+  const baseOctave = parseInt(octaveSelect.value);
+  const extend = parseInt(extendSelect.value);
+  
+  // 基础八度的主音MIDI号
+  const baseTonic = tonicMidi + baseOctave * 12;
+  const intervals = scale.intervals;
+  const degrees = scale.degrees;
+  
+  // 构建一个八度内的音（包含主音到高八度主音）
+  const octaveNotes = intervals.map((interval, idx) => ({
+    midi: baseTonic + interval,
+    degree: degrees[idx],
+    interval: interval,
+    isTonic: interval === 0,
+    isDominant: interval === 7,  // 属音（纯五度）
+    isSubdominant: interval === 5 // 下属音（纯四度）
+  }));
+  
+  // 添加上方八度的主音作为闭环
+  const topTonic = {
+    midi: baseTonic + 12,
+    degree: degrees[0],
+    interval: 12,
+    isTonic: true,
+    isDominant: false,
+    isSubdominant: false
+  };
+  
+  let allNotes = [...octaveNotes, topTonic];
+  
+  // 扩展：向下添加音
+  if (extend > 0) {
+    const extendedDown = [];
+    for (let i = 1; i <= extend; i++) {
+      // 从下方八度取最后几个音
+      const prevOctaveStart = baseTonic - 12;
+      // 取下方八度中，从末尾倒数的音
+      const downIndices = intervals.slice(-extend).map((int, idx) => ({
+        midi: prevOctaveStart + int,
+        degree: degrees[intervals.length - extend + idx],
+        interval: int - 12,
+        isTonic: false,
+        isDominant: false,
+        isSubdominant: false,
+        extended: true
+      }));
+      extendedDown.unshift(...downIndices);
+    }
+    allNotes = [...extendedDown, ...allNotes];
+  }
+  
+  // 扩展：向上添加音
+  if (extend > 0) {
+    const nextOctaveStart = baseTonic + 12;
+    for (let i = 1; i <= extend; i++) {
+      const upNotes = intervals.slice(0, extend).map((int, idx) => ({
+        midi: nextOctaveStart + int + (i-1)*12,
+        degree: degrees[idx],
+        interval: int + i*12,
+        isTonic: int === 0,
+        isDominant: int === 7,
+        isSubdominant: int === 5,
+        extended: true
+      }));
+      allNotes.push(...upNotes);
+    }
+  }
+  
+  return { notes: allNotes, scale };
+}
+
+function renderKeyboard() {
+  const { notes, scale } = getCurrentNotes();
+  keyboardEl.innerHTML = '';
+  
+  scaleDescEl.textContent = scale.desc + ' | 共 ' + notes.length + ' 个音';
+  
+  notes.forEach((note, idx) => {
+    const key = document.createElement('div');
+    key.className = 'key';
+    if (note.isTonic) key.classList.add('tonic');
+    else if (note.isDominant) key.classList.add('dominant');
+    else if (note.isSubdominant) key.classList.add('subdominant');
+    
+    const noteName = midiToNoteName(note.midi);
+    const octave = Math.floor(note.midi / 12) - 1;
+    const bind = KEY_BINDINGS[idx] || '';
+    
+    key.innerHTML = `
+      <span class="octave-label">${octave}</span>
+      <div class="note-name">${noteName}</div>
+      <div class="degree">${note.degree}</div>
+      ${bind ? `<div class="bind">${bind.toUpperCase()}</div>` : ''}
+    `;
+    
+    key.dataset.midi = note.midi;
+    key.dataset.bind = bind;
+    
+    // 鼠标交互
+    const startNote = () => {
+      key.classList.add('active');
+      playNote(note.midi, waveformSelect.value, 0.3);
+    };
+    const endNote = () => {
+      key.classList.remove('active');
+    };
+    
+    key.addEventListener('mousedown', startNote);
+    key.addEventListener('mouseup', endNote);
+    key.addEventListener('mouseleave', endNote);
+    key.addEventListener('touchstart', (e) => { e.preventDefault(); startNote(); });
+    key.addEventListener('touchend', endNote);
+    
+    keyboardEl.appendChild(key);
+  });
+}
+
+// 键盘事件
+const pressedKeys = new Set();
+
+document.addEventListener('keydown', (e) => {
+  if (e.repeat) return;
+  const key = e.key.toLowerCase();
+  const idx = KEY_BINDINGS.indexOf(key);
+  if (idx === -1) return;
+  
+  const keys = keyboardEl.querySelectorAll('.key');
+  if (idx < keys.length) {
+    const keyEl = keys[idx];
+    if (!pressedKeys.has(key)) {
+      pressedKeys.add(key);
+      keyEl.classList.add('active');
+      playNote(parseInt(keyEl.dataset.midi), waveformSelect.value, 0.3);
+    }
+  }
+});
+
+document.addEventListener('keyup', (e) => {
+  const key = e.key.toLowerCase();
+  const idx = KEY_BINDINGS.indexOf(key);
+  if (idx === -1) return;
+  pressedKeys.delete(key);
+  
+  const keys = keyboardEl.querySelectorAll('.key');
+  if (idx < keys.length) {
+    keys[idx].classList.remove('active');
+  }
+});
+
+// 事件监听
+categorySelect.addEventListener('change', updateScaleOptions);
+scaleSelect.addEventListener('change', renderKeyboard);
+tonicSelect.addEventListener('change', renderKeyboard);
+octaveSelect.addEventListener('change', renderKeyboard);
+extendSelect.addEventListener('change', renderKeyboard);
+volumeSlider.addEventListener('input', (e) => setVolume(e.target.value));
+
+// 初始化
+initControls();
+setVolume(volumeSlider.value);
+</script>
+
+</body>
+</html>
