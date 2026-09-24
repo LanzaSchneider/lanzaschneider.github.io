@@ -27,12 +27,23 @@
   transform: scale(1.03);
 }
 
-/* 确保文字内容在底纹之上 */
+/* 确保文字内容在底纹之上，但让点击穿透到整卡链接 */
 .post-entry .entry-header,
 .post-entry .entry-content,
-.post-entry .entry-footer {
+.post-entry .entry-footer,
+.first-entry .entry-header,
+.first-entry .entry-content,
+.first-entry .entry-footer {
   position: relative;
   z-index: 1;
+  pointer-events: none;
+}
+
+/* 整卡链接浮于文字上方，保证点击任意位置都能进入文章 */
+.post-entry .entry-link,
+.first-entry .entry-link {
+  z-index: 2;
+  pointer-events: auto;
 }
 
 /* 暗色模式下调整透明度 */
